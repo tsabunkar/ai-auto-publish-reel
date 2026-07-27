@@ -1,0 +1,110 @@
+{
+  "1": {
+    "class_type": "LoadDiffusionModel",
+    "inputs": {
+      "model_name": "wan2.2_t2v_high_noise_14B_fp8_scaled.safetensors"
+    }
+  },
+  "2": {
+    "class_type": "LoadDiffusionModel",
+    "inputs": {
+      "model_name": "wan2.2_t2v_low_noise_14B_fp8_scaled.safetensors"
+    }
+  },
+  "3": {
+    "class_type": "CLIPLoader",
+    "inputs": {
+      "clip_name": "umt5_xxl_fp8_e4m3fn_scaled.safetensors"
+    }
+  },
+  "4": {
+    "class_type": "VAELoader",
+    "inputs": {
+      "vae_name": "wan_2.1_vae.safetensors"
+    }
+  },
+  "5": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "text": "",
+      "clip": ["3", 0]
+    }
+  },
+  "6": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "text": "blurry, low quality, distorted, watermark, text overlay",
+      "clip": ["3", 0]
+    }
+  },
+  "7": {
+    "class_type": "EmptyHunyuanLatentVideo",
+    "inputs": {
+      "width": 720,
+      "height": 1280,
+      "length": 81
+    }
+  },
+  "8": {
+    "class_type": "ModelSamplingSD3",
+    "inputs": {
+      "shift": 8.0,
+      "model": ["1", 0]
+    }
+  },
+  "9": {
+    "class_type": "KSamplerAdvanced",
+    "inputs": {
+      "seed": 42,
+      "steps": 30,
+      "cfg": 5.0,
+      "sampler_name": "euler",
+      "scheduler": "sgm_uniform",
+      "start_at_step": 0,
+      "end_at_step": 15,
+      "return_with_leftover_noise": true,
+      "model": ["8", 0],
+      "positive": ["5", 0],
+      "negative": ["6", 0],
+      "latent_image": ["7", 0]
+    }
+  },
+  "10": {
+    "class_type": "ModelSamplingSD3",
+    "inputs": {
+      "shift": 8.0,
+      "model": ["2", 0]
+    }
+  },
+  "11": {
+    "class_type": "KSamplerAdvanced",
+    "inputs": {
+      "seed": 42,
+      "steps": 30,
+      "cfg": 5.0,
+      "sampler_name": "euler",
+      "scheduler": "sgm_uniform",
+      "start_at_step": 15,
+      "end_at_step": 30,
+      "return_with_leftover_noise": false,
+      "model": ["10", 0],
+      "positive": ["5", 0],
+      "negative": ["6", 0],
+      "latent_image": ["9", 0]
+    }
+  },
+  "12": {
+    "class_type": "VAEDecode",
+    "inputs": {
+      "samples": ["11", 0],
+      "vae": ["4", 0]
+    }
+  },
+  "13": {
+    "class_type": "CreateVideo",
+    "inputs": {
+      "fps": 16,
+      "images": ["12", 0]
+    }
+  }
+}
