@@ -15,6 +15,7 @@ class TTSGenerator:
         stop=tenacity.stop_after_attempt(2),
         wait=tenacity.wait_exponential(multiplier=1, min=1, max=10),
         retry=tenacity.retry_if_exception_type(TTSGenerationError),
+        reraise=True,
     )
     def synthesize(self, text: str, output_path: Path) -> Path:
         max_chars = 3000

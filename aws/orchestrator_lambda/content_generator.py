@@ -16,6 +16,7 @@ class ContentGenerator:
         stop=tenacity.stop_after_attempt(3),
         wait=tenacity.wait_exponential(multiplier=1, min=2, max=30),
         retry=tenacity.retry_if_exception_type(ContentGenerationError),
+        reraise=True,
     )
     def generate(self, topics: list[str]) -> dict[str, Any]:
         prompt = self._build_prompt(topics)

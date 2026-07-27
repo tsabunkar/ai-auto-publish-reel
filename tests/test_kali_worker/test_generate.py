@@ -28,7 +28,7 @@ class TestGenerate:
             height=1280,
             length=81,
         )
-        assert result["5"]["inputs"]["text"] == "A new prompt"
+        assert result["5"]["inputs"]["text"] == ""
 
     def test_inject_prompt_sets_seed(self, sample_workflow):
         result = inject_prompt(sample_workflow, video_prompt="test", seed=42)

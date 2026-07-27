@@ -20,6 +20,7 @@ class RsyncClient:
         stop=tenacity.stop_after_attempt(3),
         wait=tenacity.wait_exponential(multiplier=1, min=2, max=20),
         retry=tenacity.retry_if_exception_type(VideoTransferError),
+        reraise=True,
     )
     def pull(self, remote_path: str, local_dir: str) -> VideoTransferResult:
         Path(local_dir).mkdir(parents=True, exist_ok=True)
@@ -62,6 +63,7 @@ class RsyncClient:
         stop=tenacity.stop_after_attempt(3),
         wait=tenacity.wait_exponential(multiplier=1, min=2, max=20),
         retry=tenacity.retry_if_exception_type(VideoTransferError),
+        reraise=True,
     )
     def push(self, local_path: str, remote_dir: str) -> None:
         cmd: list[str] = [

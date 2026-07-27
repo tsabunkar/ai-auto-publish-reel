@@ -15,6 +15,7 @@ class EventPublisher:
         stop=tenacity.stop_after_attempt(3),
         wait=tenacity.wait_exponential(multiplier=1, min=1, max=10),
         retry=tenacity.retry_if_exception_type(EventPublishError),
+        reraise=True,
     )
     def publish(self, topic: str, payload: dict[str, Any]) -> None:
         try:

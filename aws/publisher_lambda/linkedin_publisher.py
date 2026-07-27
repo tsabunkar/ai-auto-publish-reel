@@ -21,6 +21,7 @@ class LinkedInPublisher:
         stop=tenacity.stop_after_attempt(2),
         wait=tenacity.wait_exponential(multiplier=1, min=2, max=10),
         retry=tenacity.retry_if_exception_type(SocialPublishError),
+        reraise=True,
     )
     def publish(self, video_path: Path, commentary: str) -> str:
         file_size = video_path.stat().st_size

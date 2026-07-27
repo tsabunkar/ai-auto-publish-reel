@@ -11,7 +11,7 @@ class TopicCrawler:
             try:
                 feed = feedparser.parse(url)
                 for entry in feed.entries[:max_items]:
-                    title = entry.get("title", "").strip()
+                    title = entry.title.strip()
                     if title:
                         topics.append(title)
             except Exception as exc:

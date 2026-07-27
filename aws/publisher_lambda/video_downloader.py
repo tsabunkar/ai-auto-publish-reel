@@ -14,6 +14,7 @@ class VideoDownloader:
         stop=tenacity.stop_after_attempt(3),
         wait=tenacity.wait_exponential(multiplier=1, min=1, max=10),
         retry=tenacity.retry_if_exception_type(VideoDownloadError),
+        reraise=True,
     )
     def download(self, bucket: str, key: str, dest: Path) -> Path:
         try:

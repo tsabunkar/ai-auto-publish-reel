@@ -46,7 +46,7 @@ class TestInstagramPublisher:
         mock_publish.json.return_value = {
             "error": {"code": 2207042, "message": "Rate limit"}
         }
-        mock_post.side_effect = [mock_create, mock_publish]
+        mock_post.side_effect = [mock_create, mock_publish, mock_create, mock_publish]
 
         publisher = InstagramPublisher(self.credentials)
         with pytest.raises(SocialPublishError, match="rate limit"):

@@ -15,11 +15,12 @@ def config():
 
 
 class TestMQTTClient:
+    @pytest.mark.asyncio
     @patch("macbook.controller.mqtt_client.mqtt_connection_builder")
     @patch("macbook.controller.mqtt_client.io.EventLoopGroup")
     @patch("macbook.controller.mqtt_client.io.DefaultHostResolver")
     @patch("macbook.controller.mqtt_client.io.ClientBootstrap")
-    def test_connect_builds_connection(
+    async def test_connect_builds_connection(
         self, _mock_bootstrap, _mock_resolver, _mock_elg, mock_builder, config
     ):
         mock_conn = MagicMock()
@@ -29,8 +30,7 @@ class TestMQTTClient:
         mock_builder.websockets_with_default_aws_signing.return_value = mock_conn
 
         client = MQTTClient(config)
-        client._connection = mock_conn
-        assert client._connection is mock_conn
+        await client.connect()
         mock_builder.websockets_with_default_aws_signing.assert_called_once()
 
     @pytest.mark.asyncio

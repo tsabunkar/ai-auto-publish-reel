@@ -151,7 +151,7 @@ class SSHRenderer:
         ]
         start = time.monotonic()
         try:
-            result = subprocess.run(
+            subprocess.run(
                 cmd,
                 check=True,
                 capture_output=True,

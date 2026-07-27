@@ -16,6 +16,7 @@ class PromptWriter:
         stop=tenacity.stop_after_attempt(3),
         wait=tenacity.wait_exponential(multiplier=1, min=1, max=10),
         retry=tenacity.retry_if_exception_type(PromptWriteError),
+        reraise=True,
     )
     def write_prompt(self, bucket: str, content: dict[str, Any]) -> str:
         job_id = content.get("job_id", str(uuid4()))
@@ -35,6 +36,7 @@ class PromptWriter:
         stop=tenacity.stop_after_attempt(3),
         wait=tenacity.wait_exponential(multiplier=1, min=1, max=10),
         retry=tenacity.retry_if_exception_type(PromptWriteError),
+        reraise=True,
     )
     def upload_audio(self, bucket: str, audio_path: str, job_id: str) -> str:
         key = f"audio/{job_id}.mp3"

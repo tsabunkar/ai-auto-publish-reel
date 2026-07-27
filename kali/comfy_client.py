@@ -1,7 +1,7 @@
 import json
 import time
-import urllib.request
 import urllib.error
+import urllib.request
 from pathlib import Path
 from typing import Any, cast
 from uuid import uuid4
@@ -71,6 +71,7 @@ class ComfyClient:
         stop=tenacity.stop_after_attempt(3),
         wait=tenacity.wait_exponential(multiplier=1, min=1, max=10),
         retry=tenacity.retry_if_exception_type(ComfyUIError),
+        reraise=True,
     )
     def download_video(
         self, prompt_id: str, node_id: str, output_dir: Path

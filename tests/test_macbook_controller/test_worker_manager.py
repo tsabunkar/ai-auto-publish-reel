@@ -1,4 +1,4 @@
-from unittest.mock import AsyncMock, MagicMock
+from unittest.mock import MagicMock
 
 import pytest
 
@@ -22,7 +22,7 @@ def config():
 class TestWorkerManager:
     @pytest.mark.asyncio
     async def test_process_success(self, config):
-        ssh_renderer = AsyncMock()
+        ssh_renderer = MagicMock()
         rsync = MagicMock()
         rsync.pull.return_value = MagicMock(
             local_path="./artifacts/output.mp4", size_bytes=1000, elapsed_seconds=10.0
@@ -42,7 +42,7 @@ class TestWorkerManager:
     async def test_process_ssh_failure(self, config):
         from macbook.shared.exceptions import SSHExecutionError
 
-        ssh_renderer = AsyncMock()
+        ssh_renderer = MagicMock()
         ssh_renderer.render.side_effect = SSHExecutionError(
             1, "", "error", ["ssh"], 5.0
         )

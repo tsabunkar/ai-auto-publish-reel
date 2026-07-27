@@ -7,7 +7,7 @@ from aws.shared.exceptions import TopicCrawlError
 
 
 class TestTopicCrawler:
-    def test_crawl_returns_titles(self, _mock_rss_content):
+    def test_crawl_returns_titles(self):
         crawler = TopicCrawler()
         with patch("feedparser.parse") as mock_parse:
             mock_feed = MagicMock()

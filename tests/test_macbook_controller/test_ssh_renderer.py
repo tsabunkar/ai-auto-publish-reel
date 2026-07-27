@@ -42,9 +42,9 @@ class TestSSHRenderer:
         renderer = SSHRenderer(config)
         with patch("subprocess.run") as mock_run:
             mock_run.side_effect = subprocess.CalledProcessError(
-                1, "ssh", stdout="", stderr="Error occurred"
+                1, "ssh", output="", stderr="Error occurred"
             )
-            with pytest.raises(SSHExecutionError, match="non-zero"):
+            with pytest.raises(SSHExecutionError, match="SSH command failed"):
                 renderer.render("/tmp/prompt.json", "/tmp/output.mp4")
 
     def test_copy_video_success(self, config, tmp_path):
@@ -60,7 +60,8 @@ class TestSSHRenderer:
 
     def test_copy_video_failure(self, config):
         renderer = SSHRenderer(config)
+        from macbook.shared.exceptions import VideoTransferError
         with patch("subprocess.run", side_effect=subprocess.CalledProcessError(
             1, "rsync", stderr="Connection refused"
-        )), pytest.raises(SSHExecutionError):
+        )), pytest.raises(VideoTransferError):
             renderer.copy_video("/tmp/output.mp4", "./artifacts")

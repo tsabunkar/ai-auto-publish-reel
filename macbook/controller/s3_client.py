@@ -18,6 +18,7 @@ class S3Client:
         stop=tenacity.stop_after_attempt(3),
         wait=tenacity.wait_exponential(multiplier=1, min=1, max=10),
         retry=tenacity.retry_if_exception_type(S3OperationError),
+        reraise=True,
     )
     def download_json(self, bucket: str, key: str) -> dict[str, Any]:
         try:
@@ -34,6 +35,7 @@ class S3Client:
         stop=tenacity.stop_after_attempt(3),
         wait=tenacity.wait_exponential(multiplier=1, min=1, max=10),
         retry=tenacity.retry_if_exception_type(S3OperationError),
+        reraise=True,
     )
     def upload_file(self, bucket: str, key: str, file_path: Path) -> str:
         try:
@@ -52,6 +54,7 @@ class S3Client:
         stop=tenacity.stop_after_attempt(3),
         wait=tenacity.wait_exponential(multiplier=1, min=1, max=10),
         retry=tenacity.retry_if_exception_type(S3OperationError),
+        reraise=True,
     )
     def download_file(self, bucket: str, key: str, dest: Path) -> Path:
         try:

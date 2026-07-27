@@ -67,5 +67,5 @@ class TestHandler:
         mock_tts = MagicMock()
         mock_tts.synthesize.return_value = str(tmp_path / "audio.mp3")
         result = _create_audio(mock_tts, "Hello", str(tmp_path), "job-123")
-        assert result == str(tmp_path / "audio.mp3")
+        assert result == str(tmp_path / "job-123.mp3")
         mock_tts.synthesize.assert_called_once()
