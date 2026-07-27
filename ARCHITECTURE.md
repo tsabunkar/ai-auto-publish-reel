@@ -5,7 +5,7 @@
 ```mermaid
 flowchart TB
     subgraph AWS["AWS Cloud"]
-        EB[EventBridge<br/>cron(30 4 ? * MON *)]
+        EB["EventBridge<br/>cron(30 4 ? * MON *)"]
         OL[Orchestrator Lambda]
         BR[Amazon Bedrock Claude]
         PO[Amazon Polly]
