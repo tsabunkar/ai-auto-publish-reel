@@ -46,7 +46,7 @@ class TestHandler:
             mock_config.return_value.rss_feed_urls = "https://feed.com"
             mock_config.return_value.bedrock_model_id = "test-model"
             mock_config.return_value.polly_voice_id = "Matthew"
-            mock_config.return_value.job_queue_topic = "reel/generate"
+            mock_config.return_value.job_queue_topic = "image/generate"
             mock_config.return_value.aws_region = "us-east-1"
 
             result = handler({}, None)

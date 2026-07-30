@@ -19,6 +19,6 @@ output "iot_endpoint" {
 }
 
 output "iot_completed_rule_arn" {
-  description = "IoT Topic Rule ARN for reel/completed"
-  value       = aws_iot_topic_rule.reel_completed.arn
+  description = "IoT Topic Rule ARN for image/completed"
+  value       = aws_iot_topic_rule.image_completed.arn
 }

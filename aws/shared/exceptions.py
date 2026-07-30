@@ -19,7 +19,7 @@ class PromptWriteError(OrchestratorError):
 
 
 class EventPublishError(OrchestratorError):
-    """MQTT publish to reel/generate failed."""
+    """MQTT publish to image/generate failed."""
 
 
 class PublisherError(Exception):

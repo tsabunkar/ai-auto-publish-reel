@@ -1,7 +1,7 @@
 [project]
-name = "ai-content-automation-platform"
+name = "ai-auto-publish-image-inhouse-server"
 version = "1.0.0"
-description = "AI Content Automation Platform — generates AI videos and publishes to social media"
+description = "AI Auto-Publish Image In-House Server — generates AI videos/images and publishes to social media"
 requires-python = ">=3.13"
 dependencies = []
 

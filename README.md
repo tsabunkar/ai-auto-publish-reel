@@ -1,4 +1,4 @@
-# AI Content Automation Platform
+# AI Auto-Publish Image In-House Server
 
 Automated educational leadership content pipeline: generates AI videos via ComfyUI/Wan2.2 on a dedicated GPU worker, uploads to AWS S3, and publishes to Instagram, LinkedIn, and YouTube — all triggered on a weekly schedule.
 

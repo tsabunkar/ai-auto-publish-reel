@@ -12,7 +12,7 @@ class TestEventPublisher:
         mock_iot = MagicMock()
         mock_boto.return_value = mock_iot
         publisher = EventPublisher(region="us-east-1")
-        publisher.publish("reel/generate", {"job_id": "123"})
+        publisher.publish("image/generate", {"job_id": "123"})
         mock_iot.publish.assert_called_once()
 
     @patch("aws.orchestrator_lambda.event_publisher.boto3.client")
@@ -22,4 +22,4 @@ class TestEventPublisher:
         mock_iot.publish.side_effect = Exception("IoT error")
         publisher = EventPublisher(region="us-east-1")
         with pytest.raises(EventPublishError, match="IoT error"):
-            publisher.publish("reel/generate", {})
+            publisher.publish("image/generate", {})

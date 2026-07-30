@@ -1,4 +1,4 @@
-# Architecture
+# AI Auto-Publish Image In-House Server — Architecture
 
 ## System Overview
 
@@ -11,7 +11,7 @@ flowchart TB
         PO[Amazon Polly]
         S3[(S3 Bucket)]
         IOT[AWS IoT Core]
-        RULE[AWS IoT Topic Rule<br/>reel/completed]
+        RULE[AWS IoT Topic Rule<br/>image/completed]
         PL[Publisher Lambda]
         SM[Secrets Manager]
 
@@ -19,7 +19,7 @@ flowchart TB
         OL -->|RSS crawl| BR
         OL -->|Synthesize speech| PO
         OL -->|Upload prompt + audio| S3
-        OL -->|Publish reel/generate| IOT
+        OL -->|Publish image/generate| IOT
         IOT -->|Invoke via rule| RULE
         RULE -->|Invoke| PL
         PL -->|Get tokens| SM
@@ -31,11 +31,11 @@ flowchart TB
         RSYNC[RsyncClient<br/>subprocess.run rsync]
         WC[WorkerManager]
 
-        MQTT -->|Subscribe reel/generate| WC
+        MQTT -->|Subscribe image/generate| WC
         WC -->|SSH + caffeinate| SSH
         WC -->|rsync| RSYNC
         RSYNC -->|Upload video| S3
-        WC -->|Publish reel/completed| MQTT
+        WC -->|Publish image/completed| MQTT
         MQTT -->|publish| IOT
     end
 
@@ -78,13 +78,13 @@ EventBridge fires Monday 04:30 UTC
   → Amazon Polly synthesizes voiceover → audio/{jobId}.mp3
   → Upload prompt.json → S3 prompts/{jobId}.json
       (includes presigned URL for audio file)
-  → Publish MQTT reel/generate { jobId, bucket, promptKey }
+  → Publish MQTT image/generate { jobId, bucket, promptKey }
 ```
 
 ### 2. Control Plane (MacBook)
 
 ```
-MQTT subscription: reel/generate (AWS IoT Device SDK v2, QoS 1)
+MQTT subscription: image/generate (AWS IoT Device SDK v2, QoS 1)
   → Download prompt.json from S3
   → Rsync prompt.json to Kali:/tmp/{jobId}.json
   → SSH (with caffeinate to prevent sleep):
@@ -94,7 +94,7 @@ MQTT subscription: reel/generate (AWS IoT Device SDK v2, QoS 1)
   → BLOCK until SSH exits (no polling, no heartbeat)
   → Rsync /tmp/{jobId}.mp4 from Kali → local ./artifacts/
   → Upload ./artifacts/{jobId}.mp4 → S3 videos/{jobId}.mp4
-  → Publish MQTT reel/completed { jobId, bucket, videoKey }
+  → Publish MQTT image/completed { jobId, bucket, videoKey }
 ```
 
 If busy when a new job arrives: log "Reject — busy" and drop the message.
@@ -117,8 +117,8 @@ generate.py invoked via SSH
 ### 4. Social Publishing (AWS Lambda)
 
 ```
-MQTT message on reel/completed
-  → AWS IoT Topic Rule: SELECT * FROM 'reel/completed'
+MQTT message on image/completed
+  → AWS IoT Topic Rule: SELECT * FROM 'image/completed'
   → Invokes Publisher Lambda with { jobId, bucket, videoKey }
   → Download video from S3 to /tmp
   → Generate presigned URL for Instagram
@@ -150,9 +150,9 @@ sequenceDiagram
     OL->>OL: Bedrock Claude → content
     OL->>OL: Polly → audio.mp3
     OL->>S3: Upload prompt.json + audio.mp3
-    OL->>IOT: Publish reel/generate
+    OL->>IOT: Publish image/generate
 
-    IOT->>MC: Deliver reel/generate (QoS 1)
+    IOT->>MC: Deliver image/generate (QoS 1)
     MC->>S3: Download prompt.json
     MC->>KL: rsync prompt.json
     MC->>KL: SSH generate.py (blocking)
@@ -162,7 +162,7 @@ sequenceDiagram
     KL-->>MC: SSH exits
     MC->>KL: rsync output.mp4
     MC->>S3: Upload videos/output.mp4
-    MC->>IOT: Publish reel/completed
+    MC->>IOT: Publish image/completed
 
     IOT->>PL: IoT Topic Rule → Invoke Lambda
     PL->>S3: Download output.mp4

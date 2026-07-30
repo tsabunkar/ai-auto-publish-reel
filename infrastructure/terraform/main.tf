@@ -19,7 +19,7 @@ resource "aws_lambda_function" "orchestrator" {
       RSS_FEED_URLS    = var.rss_feed_urls
       BEDROCK_MODEL_ID = var.bedrock_model_id
       POLLY_VOICE_ID   = var.polly_voice_id
-      JOB_QUEUE_TOPIC  = "reel/generate"
+      JOB_QUEUE_TOPIC  = "image/generate"
       AWS_REGION       = var.aws_region
     }
   }

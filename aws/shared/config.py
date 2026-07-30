@@ -11,7 +11,7 @@ class OrchestratorConfig(BaseSettings):
     )
     bedrock_model_id: str = "anthropic.claude-3-5-sonnet-20241022-v2:0"
     polly_voice_id: str = "Matthew"
-    job_queue_topic: str = "reel/generate"
+    job_queue_topic: str = "image/generate"
 
 
 class PublisherConfig(BaseSettings):

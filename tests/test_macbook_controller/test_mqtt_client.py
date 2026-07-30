@@ -40,7 +40,7 @@ class TestMQTTClient:
         client._connected.set()
 
         callback = AsyncMock()
-        await client.subscribe("reel/generate", callback)
+        await client.subscribe("image/generate", callback)
 
         client._connection.subscribe.assert_called_once()
 
@@ -50,7 +50,7 @@ class TestMQTTClient:
         client._connection = MagicMock()
         client._connected.set()
 
-        await client.publish("reel/completed", {"job_id": "123"})
+        await client.publish("image/completed", {"job_id": "123"})
 
         client._connection.publish.assert_called_once()
 

@@ -2,10 +2,9 @@ data "aws_iot_endpoint" "ats" {
   endpoint_type = "iot:Data-ATS"
 }
 
-resource "aws_iot_topic_rule" "reel_completed" {
-  name        = "reel_completed_${var.environment}"
-  enabled     = true
-  sql         = "SELECT * FROM 'reel/completed'"
+resource "aws_iot_topic_rule" "image_completed" {
+  name        = "image_completed_${var.environment}"
+  sql         = "SELECT * FROM 'image/completed'"
   sql_version = "2016-03-23"
 
   lambda {
@@ -18,5 +17,5 @@ resource "aws_lambda_permission" "iot_publisher" {
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.publisher.function_name
   principal     = "iot.amazonaws.com"
-  source_arn    = aws_iot_topic_rule.reel_completed.arn
+  source_arn    = aws_iot_topic_rule.image_completed.arn
 }

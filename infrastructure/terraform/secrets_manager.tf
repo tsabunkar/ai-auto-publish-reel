@@ -1,6 +1,6 @@
 resource "aws_secretsmanager_secret" "instagram" {
   name                    = "instagram-credentials-${var.environment}"
-  description             = "Instagram Graph API credentials for reel publishing"
+  description             = "Instagram Graph API credentials for image publishing"
   recovery_window_in_days = 7
 }
 
