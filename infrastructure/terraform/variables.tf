@@ -50,3 +50,9 @@ variable "schedule_expression" {
   type        = string
   default     = "cron(30 4 ? * MON *)"
 }
+
+variable "job_queue_topic" {
+  description = "IoT topic used as the job queue (orchestrator publishes, MacBook subscribes)"
+  type        = string
+  default     = "image/generate"
+}
