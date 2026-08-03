@@ -21,17 +21,27 @@ install:
 	poetry install --extras "orchestrator publisher macbook kali"
 	poetry install --extras dev
 
+LAMBDA_IMAGE ?= public.ecr.aws/lambda/python:3.13
+
 build-orchestrator:
+	rm -rf build/orchestrator-package build/orchestrator.zip
 	mkdir -p build
 	poetry export --extras orchestrator -f requirements.txt --output build/orchestrator-requirements.txt
-	pip install -r build/orchestrator-requirements.txt -t build/orchestrator-package/
+	docker run --rm --entrypoint pip --platform linux/arm64 \
+		-v "$(PWD)/build":/build \
+		-w /build $(LAMBDA_IMAGE) \
+		install -r /build/orchestrator-requirements.txt -t /build/orchestrator-package/
 	cp -r aws build/orchestrator-package/
 	cd build/orchestrator-package && zip -r ../orchestrator.zip .
 
 build-publisher:
+	rm -rf build/publisher-package build/publisher.zip
 	mkdir -p build
 	poetry export --extras publisher -f requirements.txt --output build/publisher-requirements.txt
-	pip install -r build/publisher-requirements.txt -t build/publisher-package/
+	docker run --rm --entrypoint pip --platform linux/arm64 \
+		-v "$(PWD)/build":/build \
+		-w /build $(LAMBDA_IMAGE) \
+		install -r /build/publisher-requirements.txt -t /build/publisher-package/
 	cp -r aws build/publisher-package/
 	cd build/publisher-package && zip -r ../publisher.zip .
 

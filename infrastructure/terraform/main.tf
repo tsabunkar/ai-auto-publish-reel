@@ -8,6 +8,7 @@ resource "aws_lambda_function" "orchestrator" {
   role          = aws_iam_role.orchestrator.arn
   handler       = "aws.orchestrator_lambda.handler.handler"
   runtime       = "python3.13"
+  architectures = ["arm64"]
   timeout       = 300
   memory_size   = 512
   filename      = var.orchestrator_lambda_zip
@@ -20,7 +21,6 @@ resource "aws_lambda_function" "orchestrator" {
       BEDROCK_MODEL_ID = var.bedrock_model_id
       POLLY_VOICE_ID   = var.polly_voice_id
       JOB_QUEUE_TOPIC  = "image/generate"
-      AWS_REGION       = var.aws_region
     }
   }
 
@@ -34,6 +34,7 @@ resource "aws_lambda_function" "publisher" {
   role          = aws_iam_role.publisher.arn
   handler       = "aws.publisher_lambda.handler.handler"
   runtime       = "python3.13"
+  architectures = ["arm64"]
   timeout       = 600
   memory_size   = 1024
   filename      = var.publisher_lambda_zip
@@ -45,7 +46,6 @@ resource "aws_lambda_function" "publisher" {
       INSTAGRAM_SECRET_ID     = aws_secretsmanager_secret.instagram.name
       LINKEDIN_SECRET_ID      = aws_secretsmanager_secret.linkedin.name
       YOUTUBE_SECRET_ID       = aws_secretsmanager_secret.youtube.name
-      AWS_REGION              = var.aws_region
     }
   }
 

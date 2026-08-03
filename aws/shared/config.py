@@ -9,7 +9,7 @@ class OrchestratorConfig(BaseSettings):
     rss_feed_urls: str = (
         "https://feeds.hbr.org/harvardbusiness,https://www.forbes.com/leadership/feed/"
     )
-    bedrock_model_id: str = "anthropic.claude-3-5-sonnet-20241022-v2:0"
+    bedrock_model_id: str = "us.anthropic.claude-sonnet-4-5-20250929-v1:0"
     polly_voice_id: str = "Matthew"
     job_queue_topic: str = "image/generate"
 

@@ -1,8 +1,10 @@
-from pydantic_settings import BaseSettings
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class MacBookConfig(BaseSettings):
-    model_config = {"env_prefix": "", "case_sensitive": False}
+    model_config = SettingsConfigDict(
+        env_prefix="", case_sensitive=False, env_file=".env", extra="ignore"
+    )
 
     aws_region: str = "us-east-1"
     iot_endpoint: str = ""

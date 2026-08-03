@@ -66,7 +66,7 @@ What gets created:
 ### 4. Post-apply AWS console/CLI steps
 
 **a) Enable the Bedrock model** (one-time, console):
-Model access → `anthropic.claude-3-5-sonnet-20241022-v2:0` in us-east-1.
+Model access → `us.anthropic.claude-sonnet-4-5-20250929-v1:0` in us-east-1.
 Without this the orchestrator fails at runtime.
 
 **b) Populate Secrets Manager** (structures documented in `.env.example:38-46`):

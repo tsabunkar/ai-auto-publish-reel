@@ -24,7 +24,7 @@ variable "rss_feed_urls" {
 variable "bedrock_model_id" {
   description = "Amazon Bedrock model ID for content generation"
   type        = string
-  default     = "anthropic.claude-3-5-sonnet-20241022-v2:0"
+  default     = "us.anthropic.claude-sonnet-4-5-20250929-v1:0"
 }
 
 variable "polly_voice_id" {

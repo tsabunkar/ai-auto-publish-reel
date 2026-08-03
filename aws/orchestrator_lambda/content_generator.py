@@ -1,4 +1,5 @@
 import json
+import re
 from typing import Any
 
 import boto3
@@ -39,7 +40,7 @@ class ContentGenerator:
         text = " ".join(block.get("text", "") for block in content)
 
         try:
-            parsed: dict[str, Any] = json.loads(text)
+            parsed = self._parse_json(text)
         except json.JSONDecodeError as exc:
             raise ContentGenerationError(
                 f"Failed to parse Bedrock response as JSON: {exc}"
@@ -60,6 +61,16 @@ class ContentGenerator:
                     f"Missing required field '{key}' in Bedrock response"
                 )
         return parsed
+
+    def _parse_json(self, text: str) -> dict[str, Any]:
+        cleaned = re.sub(r"^```(?:json)?\s*|\s*```$", "", text.strip())
+        try:
+            return json.loads(cleaned)
+        except json.JSONDecodeError:
+            start, end = cleaned.find("{"), cleaned.rfind("}")
+            if start != -1 and end > start:
+                return json.loads(cleaned[start : end + 1])
+            raise
 
     def _build_prompt(self, topics: list[str]) -> str:
         topic_list = "\n".join(

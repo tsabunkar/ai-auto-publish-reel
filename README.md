@@ -2,6 +2,18 @@
 
 Automated educational leadership content pipeline: generates AI videos via ComfyUI/Wan2.2 on a dedicated GPU worker, uploads to AWS S3, and publishes to Instagram, LinkedIn, and YouTube — all triggered on a weekly schedule.
 
+## Deployment
+
+- \$ ./scripts/deploy.sh
+
+## In Macbook - To run the Controller locally in tmux
+
+- To see/attach it in your terminal:
+  tmux attach -t controller
+  Detach (keep it running): Ctrl-b then d
+  Stop it: attach and press Ctrl-c, or run tmux kill-session -t controller
+- TO run new session: tmux new-session -d -s controller -c "$PWD" ".venv/bin/python -m macbook.controller.main"
+
 ## Architecture
 
 ```
@@ -17,13 +29,13 @@ See [ARCHITECTURE.md](ARCHITECTURE.md) for full diagrams and data flow.
 
 ## Components
 
-| Component | Role | Tech |
-|-----------|------|------|
-| **Orchestrator Lambda** | RSS crawl, Bedrock content gen, Polly TTS, S3 upload, MQTT publish | Python 3.13, boto3, feedparser |
-| **MacBook Controller** | MQTT subscribe, SSH orchestration, rsync, S3 operations | Python 3.13, AWS IoT Device SDK v2 |
-| **Kali GPU Worker** | ComfyUI video generation, FFmpeg audio merge | Python 3.13, urllib, subprocess (no boto3) |
-| **Publisher Lambda** | Concurrent publish to 3 platforms | Python 3.13, boto3, requests |
-| **Terraform** | Infrastructure as Code | AWS EventBridge, Lambda, IoT Core, S3, Secrets Manager |
+| Component               | Role                                                               | Tech                                                   |
+| ----------------------- | ------------------------------------------------------------------ | ------------------------------------------------------ |
+| **Orchestrator Lambda** | RSS crawl, Bedrock content gen, Polly TTS, S3 upload, MQTT publish | Python 3.13, boto3, feedparser                         |
+| **MacBook Controller**  | MQTT subscribe, SSH orchestration, rsync, S3 operations            | Python 3.13, AWS IoT Device SDK v2                     |
+| **Kali GPU Worker**     | ComfyUI video generation, FFmpeg audio merge                       | Python 3.13, urllib, subprocess (no boto3)             |
+| **Publisher Lambda**    | Concurrent publish to 3 platforms                                  | Python 3.13, boto3, requests                           |
+| **Terraform**           | Infrastructure as Code                                             | AWS EventBridge, Lambda, IoT Core, S3, Secrets Manager |
 
 ## Prerequisites
 

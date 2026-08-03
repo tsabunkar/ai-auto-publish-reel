@@ -4,6 +4,7 @@ from collections.abc import Awaitable, Callable
 from typing import Any
 
 from awscrt import io
+from awscrt.auth import AwsCredentialsProvider
 from awscrt.mqtt import Connection, QoS
 from awsiot import mqtt_connection_builder
 
@@ -54,6 +55,7 @@ class MQTTClient:
 
         self._connection = mqtt_connection_builder.websockets_with_default_aws_signing(
             region=self._config.aws_region,
+            credentials_provider=AwsCredentialsProvider.new_default_chain(),
             client_bootstrap=client_bootstrap,
             client_id="macbook-control-plane",
             clean_session=False,
@@ -83,10 +85,12 @@ class MQTTClient:
         def _subscribe_sync() -> None:
             if self._connection is None:
                 raise MQTTConnectionError("Not connected")
-            sub_future = self._connection.subscribe(
+            sub_future, _packet_id = self._connection.subscribe(
                 topic=topic,
                 qos=QoS.AT_LEAST_ONCE,
-                callback=lambda payload: self._on_message(topic, payload),
+                callback=lambda topic, payload, dup, qos, retain: self._on_message(
+                    topic, payload
+                ),
             )
             sub_future.result()
 

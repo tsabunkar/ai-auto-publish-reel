@@ -12,7 +12,7 @@ class StructuredFormatter(logging.Formatter):
             "logger": record.name,
             "message": record.getMessage(),
         }
-        for key in ("job_id", "correlation_id", "execution_time", "worker"):
+        for key in ("job_id", "correlation_id", "execution_time", "worker", "error"):
             val = getattr(record, key, None)
             if val is not None:
                 entry[key] = val

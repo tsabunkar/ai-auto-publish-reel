@@ -35,7 +35,7 @@ data "aws_iam_policy_document" "orchestrator" {
   }
   statement {
     actions   = ["bedrock:InvokeModel"]
-    resources = ["arn:aws:bedrock:${var.aws_region}::foundation-model/${var.bedrock_model_id}"]
+    resources = ["*"]
   }
   statement {
     actions   = ["polly:SynthesizeSpeech"]
